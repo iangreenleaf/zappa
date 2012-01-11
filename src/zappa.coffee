@@ -372,18 +372,21 @@ zappa.app = (func) ->
 
   if app.settings['default layout']
     context.view layout: ->
+      extension = (path, ext) ->
+        return path if path.substr(-(ext.length)).toLowerCase() is ext.toLowerCase()
+        path + ext
       doctype 5
       html ->
         head ->
           title @title if @title
           if @scripts
             for s in @scripts
-              script src: s + '.js'
-          script(src: @script + '.js') if @script
+              script src: extension(s, '.js')
+          script(src: extension(@script, '.js')) if @script
           if @stylesheets
             for s in @stylesheets
-              link rel: 'stylesheet', href: s + '.css'
-          link(rel: 'stylesheet', href: @stylesheet + '.css') if @stylesheet
+              link rel: 'stylesheet', href: extension(s, '.css')
+          link(rel: 'stylesheet', href: extension(@stylesheet, '.css')) if @stylesheet
           style @style if @style
         body @body
 
